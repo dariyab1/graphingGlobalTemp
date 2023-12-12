@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        
+        let year = [];
+        let temp =[];
+        async function getData(){
+            const response = await
+            fetch("data.csv");
+            const data = await response.text();
+            const rows=data.split("\n").slice(1);
+            
+            rows.forEach((elem) => {
+                const row = elem.split(",");
+                year.push(row[0]);
+                temp.push(row[1]);
+            })
+
+       
+        }
+
+        async function graphData(){
+            await getData();
+            
+             const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                labels: year,
+                datasets: [{
+                    label: "Global Average Temperature",
+                    data: temp
+                }]
+                },
+                options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                }
+                }
+            });
+        }
+
+        graphData();
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+</body>
+</html>
